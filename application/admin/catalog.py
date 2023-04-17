@@ -122,7 +122,7 @@ def dish(dish_id: int):
         delete_image = form.delete_image.data
         # show_usd = form.show_usd.data
         dishservice.update_dish(dish_id, name_ru, name_uz, description_ru, description_uz,
-                                image, price, category_id, delete_image)
+                                image, price, category_id, delete_image, show_usd=False)
         flash('Блюдо {} | {} изменено'.format(name_ru, name_uz), category='success')
         return redirect(url_for('admin.catalog'))
     dish = dishservice.get_dish_by_id(dish_id)
