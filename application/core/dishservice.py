@@ -5,6 +5,7 @@ from typing import List, Optional
 from application.utils import files
 import os
 from config import Config
+from application.utils.converter import HEIC_JPG
 
 
 def get_all_categories(sort_by_number: bool = False) -> List[DishCategory]:
@@ -38,6 +39,10 @@ def update_category(category_id: int, name_ru: str, name_uz: str, parent_id=0, i
         file_path = os.path.join(Config.UPLOAD_DIRECTORY, image.filename)
         files.save_file(image, file_path)
         category.image_id = None
+        if image.filename.split('.')[-1] == 'HEIC':
+            r_f = file_path
+            file_path = HEIC_JPG(file_path)
+            files.remove_file(r_f)
         category.image_path = file_path
     db.session.commit()
     return category
@@ -50,6 +55,10 @@ def create_category(name_ru: str, name_uz: str, parent_id=0, image=None) -> Dish
     if image and image.filename != '':
         file_path = os.path.join(Config.UPLOAD_DIRECTORY, image.filename)
         files.save_file(image, file_path, recreate=True)
+        if image.filename.split('.')[-1] == 'HEIC':
+            r_f = file_path
+            file_path = HEIC_JPG(file_path)
+            files.remove_file(r_f)
         category.image_path = file_path
     db.session.add(category)
     db.session.commit()
@@ -71,6 +80,10 @@ def create_dish(name_ru, name_uz, description_ru, description_uz, image, price, 
     elif image and image.filename != '':
         file_path = os.path.join(Config.UPLOAD_DIRECTORY, image.filename)
         files.save_file(image, file_path, recreate=True)
+        if image.filename.split('.')[-1] == 'HEIC':
+            r_f = file_path
+            file_path = HEIC_JPG(file_path)
+            files.remove_file(r_f)
         dish.image_path = file_path
     db.session.add(dish)
     db.session.commit()
@@ -92,6 +105,10 @@ def update_dish(dish_id, name_ru, name_uz, description_ru, description_uz, image
         file_path = os.path.join(Config.UPLOAD_DIRECTORY, image.filename)
         files.save_file(image, file_path)
         dish.image_id = None
+        if image.filename.split('.')[-1] == 'HEIC':
+            r_f = file_path
+            file_path = HEIC_JPG(file_path)
+            files.remove_file(r_f)
         dish.image_path = file_path
     if delete_image:
         if dish.image_path:

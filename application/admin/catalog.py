@@ -82,18 +82,23 @@ def remove_category(category_id: int):
     return redirect(url_for('admin.catalog'))
 
 
+from werkzeug.datastructures import FileStorage
+
 @login_required
 @bp.route('/catalog/dish/create', methods=['GET', 'POST'])
 def create_dish():
     form = DishForm()
     all_categories = dishservice.get_all_categories()
     form.category.choices = [(c.id, '{} | {}'.format(c.name, c.name_uz)) for c in all_categories]
+    print(form)
     if form.validate_on_submit():
         name_ru = form.name_ru.data
         name_uz = form.name_uz.data
         description_ru = form.description_ru.data
         description_uz = form.description_uz.data
         image = form.image.data
+        print(form.image.name)
+        print(type(image))
         price = form.price.data
         category_id = form.category.data
         # show_usd = form.show_usd.data
@@ -111,7 +116,9 @@ def dish(dish_id: int):
     form = DishForm()
     all_categories = dishservice.get_all_categories()
     form.category.choices = [(c.id, '{} | {}'.format(c.name, c.name_uz)) for c in all_categories]
+
     if form.validate_on_submit():
+        print(form.image.data.raw)
         name_ru = form.name_ru.data
         name_uz = form.name_uz.data
         description_ru = form.description_ru.data

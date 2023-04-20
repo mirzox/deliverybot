@@ -14,7 +14,7 @@ class CategoryForm(FlaskForm):
     name_ru = StringField('Название на русском', validators=[DataRequired('Укажите название категории на русском')])
     name_uz = StringField('Название на узбекском', validators=[DataRequired('Укажите название категории на узбексокм')])
     image = FileField('Изображение',
-                      validators=[FileAllowed(['png', 'jpg'],
+                      validators=[FileAllowed(['png', 'jpg', 'heic'],
                                               message='Разрешены только изображения форматов .jpg, .png')])
     parent = SelectField('Родительская категория', coerce=int)
     submit = SubmitField('Сохранить')
@@ -36,7 +36,7 @@ class DishForm(FlaskForm):
     category = SelectField('Категория', validators=[DataRequired('Укажите категорию')], coerce=int)
     price = StringField('Цена', validators=[DataRequired('Укажите цену')])
     image = FileField('Изображение',
-                      validators=[FileAllowed(['png', 'jpg'],
+                      validators=[FileAllowed(['png', 'jpg', 'heic'],
                                               message='Разрешены только изображения форматов .jpg, .png')])
     delete_image = BooleanField('Удалить изображение')
     # show_usd = BooleanField('Показывать цену в долларах')
@@ -185,7 +185,7 @@ class UserForm(FlaskForm):
 class MailForm(FlaskForm):
     mail = StringField('Текст рассылки', validators=[DataRequired("Введите текст рассылки")])
     image = FileField('Изображение',
-                      validators=[FileAllowed(['png', 'jpg'],
+                      validators=[FileAllowed(['png', 'jpg', 'heic'],
                                               message='Разрешены только изображения форматов .jpg, .png')])
 
     submit = SubmitField('Разослать')

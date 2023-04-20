@@ -163,6 +163,7 @@ def remove_dish_from_user_cart(user_id: int, dish_name: str, language: str) -> b
         dish = user.cart.filter(Dish.name_uz == dish_name).first()
     else:
         dish = user.cart.filter(Dish.name == dish_name).first()
+        print(user.cart.filter(Dish.name == dish_name))
     if not dish:
         return False
     user.remove_dish_from_cart(dish)

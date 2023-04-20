@@ -34,9 +34,7 @@ def cart_action_processor(message: Message):
         order_processor(message)
     else:
         dish_name = message.text[2:]
-        print(f"\n\n\n{dish_name == 'Куриные голени в духовке с грибами и маслинами'}\n\n\n")
         removing_result = userservice.remove_dish_from_user_cart(user_id, dish_name, language)
-        print(removing_result)
         if removing_result:
             cart = userservice.get_user_cart(user_id)
             if len(cart) == 0:

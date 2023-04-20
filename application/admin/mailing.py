@@ -5,6 +5,8 @@ from flask_login import login_required
 from flask import render_template, redirect, url_for, flash, request
 from .forms import MailForm
 from application import telegram_bot
+from application.utils import files
+from application.utils.converter import HEIC_JPG
 import telebot
 from application.core.models import User
 import os
@@ -19,10 +21,15 @@ def mailing():
         file_name = file.filename
         if file:
             filename = secure_filename(file_name)
-            file.save(os.path.join(Config.MAILING_DIRECTORY, filename))
+            file_path = os.path.join(Config.MAILING_DIRECTORY, filename)
+            file.save(file_path)
+            if filename.split('.')[-1] == 'HEIC':
+                r_f = file_path
+                file_path = HEIC_JPG(file_path)
+                files.remove_file(r_f)
         text = mail_form.mail.data
         file_id = None
-        filepath = (Config.MAILING_DIRECTORY + file_name)
+        filepath = (Config.MAILING_DIRECTORY + f"{''.join(file_name.split('.')[:-1])}.jpg")
         users = User.query.all()
         if mail_form.image.data:
             for user in users:
