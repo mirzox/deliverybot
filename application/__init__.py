@@ -8,6 +8,8 @@ from telebot import TeleBot, logger
 import os
 import logging
 
+import sys
+
 telegram_bot = TeleBot(Config.API_TOKEN, threaded=False)
 
 app = Flask(__name__)
@@ -20,10 +22,6 @@ login.login_message = 'Для входа в систему необходима 
 login.login_message_category = 'warning'
 
 import application.core.models as models
-
-
-
-
 
 
 @app.shell_context_processor
@@ -45,7 +43,10 @@ from application.admin import bp as admin_bp
 app.register_blueprint(admin_bp)
 from application.utils import filters
 
-if 'ADMIN_DEV' not in os.environ and 'PRODUCTION' not in os.environ:
+
+value = sys.argv[-1]
+
+if 'ADMIN_DEV' not in os.environ and 'PRODUCTION' not in os.environ and value == 'bot':
     logger.setLevel(logging.DEBUG)
     telegram_bot.remove_webhook()
     telegram_bot.polling(none_stop=True)
